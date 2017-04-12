@@ -1,0 +1,6 @@
+dev
+node_modules
+.DS_Store
+test/coverage
+.dev
+.test

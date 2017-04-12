@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '4.1.2'
+before_install:
+  - nvm use 4.1.2
+  - npm install -g gulp phantomjs karma
+  - npm update -g
+script:
+  - npm test
+  - npm run build
+
+after_success:
+  - npm run coveralls
