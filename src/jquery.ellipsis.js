@@ -123,4 +123,8 @@
     });
   });
 
+  /* strip-code */
+  window.__ellipsis__ = Ellipsis;
+  /* end-strip-code */
+
 })(jQuery, window, document);
