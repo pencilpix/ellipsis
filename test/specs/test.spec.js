@@ -72,6 +72,19 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       expect(x.text).toEqual(text);
       expect(x.options).toEqual(options);
     });
+
+    describe('_excerptTillChar', () => {
+      it('should excerpt till char at position: 30', () => {
+        let options = { type: 'chars', count: 10 };
+        let p = document.querySelector('#paragraph');
+        let x = new Ellipsis(p, options);
+
+        x._excerptTillChar(30);
+        expect($(p).text().length).toEqual(33);
+      });
+
+    });
   });
+
 });
 
