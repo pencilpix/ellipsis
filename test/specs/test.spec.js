@@ -83,6 +83,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         expect($(p).text().length).toEqual(33);
       });
 
+      it('should through error when number of chars to be shown is negative', () => {
+        let options = { type: 'chars', count: 10 };
+        let p = document.querySelector('#paragraph');
+        let x = new Ellipsis(p, options);
+
+        let result = x._excerptTillChar(-1);
+        expect(result instanceof Error).toBe(true);
+      });
     });
   });
 
