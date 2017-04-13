@@ -65,6 +65,11 @@
      * private Methods
      *========================================================================*/
     _excerptTillChar(number) {
+
+      if(number < 0) {
+        return new Error('Ellipsis: Number of chars to be shown is negative !!');
+      }
+
       this.element.html(this.text.slice(0, number) + '...')
     }
 
