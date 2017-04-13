@@ -9,6 +9,11 @@
  */
 ;(function($, window, document, undefined){
   'use strict';
+
+  // check for jquery
+  if(typeof $ === undefined)
+    throw new Error('there is no jquery attached, Please include jQuery >= 2.x');
+
   // define the plugin name and the default options
   const PLUGIN_NAME = 'ellipsis';
   const VERSION     = '0.0.1';
@@ -49,8 +54,7 @@
      * Public init() initialize the plugin and do logical stuff
      */
     init() {
-      if(typeof $ === undefined)
-        this._throwError('there is no jquery attached, Please include jQuery >= 2.x');
+
     }
 
 
@@ -58,9 +62,7 @@
     /*=========================================================================
      * private Methods
      *========================================================================*/
-    _throwError(message) {
-      throw new Error(message);
-    }
+
 
 
 
