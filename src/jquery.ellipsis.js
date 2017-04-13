@@ -38,8 +38,10 @@
    * @param  {Object}      options   list of custom options
    */
   class Ellipsis{
-    constructor(element, options) {
+    constructor(element, options = {}) {
       this.element = $(element);
+      this.options = Object.assign({}, Ellipsis.DEFAULTS, options);
+      this.text = this.element.text();
 
       this.init();
     }
@@ -54,7 +56,6 @@
      * Public init() initialize the plugin and do logical stuff
      */
     init() {
-
     }
 
 
@@ -69,6 +70,9 @@
     /**========================================================================
      * GETTERS
      *========================================================================*/
+    static get DEFAULTS () {
+      return Object.freeze(DEFAULTS);
+    }
 
   }
 
