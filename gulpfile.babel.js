@@ -1,8 +1,8 @@
-import gulp from 'gulp';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import browserSync from 'browser-sync';
-import del from 'del';
-import karma from 'karma';
+const gulp            = require('gulp');
+const gulpLoadPlugins = require('gulp-load-plugins');
+const browserSync     = require('browser-sync');
+const del             = require('del');
+const karma           = require('karma');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -11,7 +11,9 @@ const KarmaServer = karma.Server;
 const lintOptions = {
   rules: {
     'no-console': 1,
-    'no-undef': 1
+    'no-undef': 1,
+    'no-unused-vars': 1,
+    'no-extra-semi': 1
   }
 };
 
@@ -42,7 +44,11 @@ gulp.task('scripts', () => {
   return gulp.src('src/**/*.js')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
-    .pipe($.babel())
+    .pipe($.babel({
+      presets: [
+        ['es2015', {modules: false}]
+      ]
+    }))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.dev'))
     .pipe(reload({stream: true}));
