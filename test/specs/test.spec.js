@@ -37,16 +37,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
     afterEach(() => {
       $('#paragraph').remove();
     });
-
-    it('should excerpt the text', () => {
-      $('#paragraph').ellipsis({
-        type: 'lines',
-        count: 4
-      });
-
-
-      expect($('#paragraph').text().length).toBeGreaterThan(text.length);
-    });
   });
+
 });
 
