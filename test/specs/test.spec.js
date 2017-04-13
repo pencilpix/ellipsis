@@ -39,5 +39,39 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
     });
   });
 
+
+  describe('Methods', () => {
+    const Ellipsis = window.__ellipsis__;
+    let text = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+dolor in reprehenderit in voluptate velit esse cillum dolore eu
+fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+sunt in culpa qui officia deserunt mollit anim id est laborum.`
+
+    beforeEach(() => {
+      $('body').append(`<p id="paragraph" style="width: 200px">${text}</p>`);
+    });
+
+
+    afterEach(() => {
+      $('#paragraph').remove();
+    });
+
+
+    it('should be initalized', () => {
+      let options = {
+          type: 'lines',
+          count: 4
+        };
+      let p = document.querySelector('#paragraph');
+      let x = new Ellipsis(p, options);
+
+      expect(x.element).toEqual($(p));
+      expect(x.text).toEqual(text);
+      expect(x.options).toEqual(options);
+    });
+  });
 });
 
