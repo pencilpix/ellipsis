@@ -105,8 +105,8 @@ gulp.task('clean', del.bind(null, ['.dev', '.test', 'dist']));
 gulp.task('minify', ['scripts'], () => {
   return gulp.src('.dev/*.js')
     .pipe($.stripCode({
-      start_comment: 'test-code',
-      end_comment: 'end-test-code'
+      start_comment: 'strip-code',
+      end_comment: 'end-strip-code'
     }))
     .pipe(gulp.dest('dist'))
     .pipe($.uglify())
