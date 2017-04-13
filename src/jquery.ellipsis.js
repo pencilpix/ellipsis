@@ -56,6 +56,7 @@
      * Public init() initialize the plugin and do logical stuff
      */
     init() {
+      this._excerptTillChar(this.options.count);
     }
 
 
@@ -63,6 +64,9 @@
     /*=========================================================================
      * private Methods
      *========================================================================*/
+    _excerptTillChar(number) {
+      this.element.html(this.text.slice(0, number) + '...')
+    }
 
 
 
