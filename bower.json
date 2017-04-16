@@ -1,0 +1,24 @@
+{
+  "name": "ellipsis",
+  "description": "ellipsis text depending on number of lines or number of chars",
+  "main": "./dist/jquery.ellipsis.min.js",
+  "authors": [
+    "Mohamed Hassan"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "excerpt",
+    "ellipsis",
+    "trunc",
+    "text",
+    "paragraph"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
