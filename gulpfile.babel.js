@@ -3,6 +3,7 @@ const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync     = require('browser-sync');
 const del             = require('del');
 const karma           = require('karma');
+const argv            = require('yargs').argv;
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -115,6 +116,24 @@ gulp.task('minify', ['scripts'], () => {
       path.extname = '.js';
     }))
     .pipe(gulp.dest('dist'));
+});
+
+
+function getVersionArgs(args) {
+  if(args.version) {
+    return $.bump({version: args.version});
+  } else if(args.type) {
+    return $.bump({type: args.type});
+  } else {
+    return $.bump();
+  }
+}
+
+
+gulp.task('bumpversion', () => {
+    gulp.src(['src/**/*.js', 'src/**/*.sass', '*.json'], {base: './'})
+      .pipe(getVersionArgs(argv))
+      .pipe(gulp.dest('./'));
 });
 
 gulp.task('build', ['lint', 'minify'], () => {
