@@ -1,6 +1,6 @@
 {
   "name": "ellipsis",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "ellipsis text depending on number of lines or number of chars",
   "private": false,
   "main": "./dist/jquery.ellipsis.min.js",
@@ -28,6 +28,7 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.2",
+    "gulp-bump": "^2.7.0",
     "gulp-cssnano": "^2.1.2",
     "gulp-eslint": "^3.0.1",
     "gulp-htmlmin": "^2.0.0",
@@ -47,9 +48,11 @@
     "karma": "^1.1.2",
     "karma-coverage": "^1.1.1",
     "karma-coveralls": "^1.1.2",
+    "karma-es6-shim": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.1",
-    "karma-spec-reporter": "0.0.26"
+    "karma-spec-reporter": "0.0.26",
+    "yargs": "^7.1.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

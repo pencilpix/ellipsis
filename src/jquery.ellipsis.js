@@ -11,7 +11,7 @@
   'use strict';
   // define the plugin name and the default options
   const PLUGIN_NAME = 'ellipsis';
-  const VERSION     = '0.0.1';
+  const VERSION     = '0.1.0';
 
 
   /**
@@ -25,6 +25,20 @@
 
 
 
+  /**
+   * the styles of span used to calculate height
+   * of each line
+   *
+   * @type { Object }
+   */
+  const SPAN_CHAR_STYLE = {
+    visibility: 'hidden',
+    opacity: 1,
+    display: 'block'
+  }
+
+
+
 
   /**
    * Ellipsis class that excerpt the text of an attached element depending
@@ -33,8 +47,12 @@
    * @param  {Object}      options   list of custom options
    */
   class Ellipsis{
-    constructor(element, options) {
+    constructor(element, options = {}) {
       this.element = $(element);
+      this.options = Object.assign({}, Ellipsis.DEFAULTS, options);
+      this.text = this.element.text();
+      this._resizeTimeout = null;
+      this._resizeHandler = this._updateOnResize.bind(this);
 
       this.init();
     }
@@ -49,8 +67,41 @@
      * Public init() initialize the plugin and do logical stuff
      */
     init() {
-      if(typeof $ === undefined)
-        this._throwError('there is no jquery attached, Please include jQuery >= 2.x');
+      let result, charsNo;
+
+      if(this.options.type === 'chars'){
+        result = this._excerptTillChar(this.options.count);
+      } else if(this.options.type === 'lines') {
+        charsNo = this._getTotalCharsInLines(this.options.count);
+        result = this._excerptTillChar(charsNo);
+      }
+
+
+      if(result instanceof Error){
+        throw result;
+      }
+
+
+      if(this.options.type === 'lines') {
+        $(window).on('resize', this._resizeHandler);
+      }
+    }
+
+
+
+    /**
+     * updating the ellipsed text.
+     */
+    update() {
+      let number;
+
+      if(this.options.type === 'lines') {
+        number = this._getTotalCharsInLines(this.options.count)
+      } else {
+        number = this.options.count;
+      }
+
+      this._excerptTillChar(number);
     }
 
 
@@ -58,15 +109,81 @@
     /*=========================================================================
      * private Methods
      *========================================================================*/
-    _throwError(message) {
-      throw new Error(message);
+    /**
+     * excerpt the text and leave a dedicated number of chars.
+     *
+     * @param { Number } number the total number of chars should be in element
+     */
+    _excerptTillChar(number) {
+      if(number <= 0)
+        return new Error('Number of chars to be shown is equal to or less than zero !!');
+
+      if(this.options.type === 'lines' && number >= 3)
+        number -= 3;
+
+      return this.element.html(this.text.slice(0, number) + '...')
     }
+
+
+
+    /**
+     * get the number of charters in dedicated
+     * number of lines.
+     *
+     * @param { Number }  linesNo  positive number that represent lines no.
+     * @return { Number } the total number of chars that could be in the lines.
+     */
+    _getTotalCharsInLines(linesNo) {
+      let count = 0;
+      let $charSpan;
+      let height;
+
+      if(linesNo <= 0) {
+        return 0;
+      }
+
+      this.element.append('<span id="ellipsis_char">x</span>');
+
+      $charSpan = $('#ellipsis_char');
+      $charSpan.css(SPAN_CHAR_STYLE);
+      height = linesNo * $charSpan.height();
+
+      $charSpan.text('');
+
+      while($charSpan.height() <= height) {
+        $charSpan.text($charSpan.text() + this.text[count]);
+        count ++;
+      }
+
+      $charSpan.remove();
+
+      if(count && typeof count === 'number') count --;
+      return count;
+    }
+
+
+
+    /**
+     * handler that used to call update method
+     * with a debounce period.
+     */
+    _updateOnResize() {
+      clearTimeout(this._resizeTimeout);
+
+      this._resizeTimeout = setTimeout(() => {
+        this.update();
+      }, 300);
+    }
+
 
 
 
     /**========================================================================
      * GETTERS
      *========================================================================*/
+    static get DEFAULTS () {
+      return Object.freeze(DEFAULTS);
+    }
 
   }
 
@@ -112,13 +229,20 @@
 
     elementsToEllipsis.each((i, element) => {
       let $element = $(element);
-      let options = {
-        type: $element.data('type') || 'lines',
-        count: $element.data('count') || 3
-      };
+      let options = {};
+
+      if( $element.data('type') !== undefined )
+        options.type =  $element.data('type');
+
+      if( $element.data('count') !== undefined )
+        options.count = $element.data('count');
 
       $element.ellipsis(options);
     });
   });
+
+  /* strip-code */
+  window.__ellipsis__ = Ellipsis;
+  /* end-strip-code */
 
 })(jQuery, window, document);

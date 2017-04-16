@@ -1,8 +1,9 @@
-import gulp from 'gulp';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import browserSync from 'browser-sync';
-import del from 'del';
-import karma from 'karma';
+const gulp            = require('gulp');
+const gulpLoadPlugins = require('gulp-load-plugins');
+const browserSync     = require('browser-sync');
+const del             = require('del');
+const karma           = require('karma');
+const argv            = require('yargs').argv;
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -11,7 +12,9 @@ const KarmaServer = karma.Server;
 const lintOptions = {
   rules: {
     'no-console': 1,
-    'no-undef': 1
+    'no-undef': 1,
+    'no-unused-vars': 1,
+    'no-extra-semi': 1
   }
 };
 
@@ -42,7 +45,11 @@ gulp.task('scripts', () => {
   return gulp.src('src/**/*.js')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
-    .pipe($.babel())
+    .pipe($.babel({
+      presets: [
+        ['es2015', {modules: false}]
+      ]
+    }))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.dev'))
     .pipe(reload({stream: true}));
@@ -99,8 +106,8 @@ gulp.task('clean', del.bind(null, ['.dev', '.test', 'dist']));
 gulp.task('minify', ['scripts'], () => {
   return gulp.src('.dev/*.js')
     .pipe($.stripCode({
-      start_comment: 'test-code',
-      end_comment: 'end-test-code'
+      start_comment: 'strip-code',
+      end_comment: 'end-strip-code'
     }))
     .pipe(gulp.dest('dist'))
     .pipe($.uglify())
@@ -109,6 +116,24 @@ gulp.task('minify', ['scripts'], () => {
       path.extname = '.js';
     }))
     .pipe(gulp.dest('dist'));
+});
+
+
+function getVersionArgs(args) {
+  if(args.version) {
+    return $.bump({version: args.version});
+  } else if(args.type) {
+    return $.bump({type: args.type});
+  } else {
+    return $.bump();
+  }
+}
+
+
+gulp.task('bumpversion', () => {
+    gulp.src(['src/**/*.js', 'src/**/*.sass', '*.json'], {base: './'})
+      .pipe(getVersionArgs(argv))
+      .pipe(gulp.dest('./'));
 });
 
 gulp.task('build', ['lint', 'minify'], () => {
