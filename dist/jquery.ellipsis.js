@@ -18,7 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   // define the plugin name and the default options
 
   var PLUGIN_NAME = 'ellipsis';
-  var VERSION = '0.1.0';
+  var VERSION = '0.1.1';
 
   /**
    * the default options of Ellipsis
