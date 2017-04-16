@@ -1,5 +1,5 @@
 {
-  "name": "ellipsis",
+  "name": "jquery-ellipsis",
   "version": "0.1.1",
   "description": "ellipsis text depending on number of lines or number of chars",
   "private": false,
