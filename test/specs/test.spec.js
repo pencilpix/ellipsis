@@ -37,6 +37,22 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
     afterEach(() => {
       $('#paragraph').remove();
     });
+
+    it('should excerpt text of p and leave only 150 chars without the ...', () => {
+      $('#paragraph').ellipsis({type: 'chars', count: 150});
+      expect($('#paragraph').text().length).toEqual(153);
+    });
+
+    it('should leave only 3 lines', () => {
+      let $p = $('#paragraph');
+      let expectedHeight = 0;
+      $p.append('<span class="height-span">x</span>');
+      expectedHeight = $('.height-span').height() * 3;
+      $('.height-span').remove();
+
+      $('#paragraph').ellipsis({type: 'lines', count: 3});
+      expect($('#paragraph').height()).toEqual(expectedHeight);
+    });
   });
 
 
@@ -51,7 +67,11 @@ fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
 sunt in culpa qui officia deserunt mollit anim id est laborum.`
 
     beforeEach(() => {
-      $('body').append(`<p id="paragraph" style="width: 200px">${text}</p>`);
+      $('body').append(`<p id="paragraph">${text}</p>`);
+      $('#paragraph').css({
+        lineHeight: '24px',
+        width: '200px'
+      });
     });
 
 
@@ -91,7 +111,35 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         let result = x._excerptTillChar(-1);
         expect(result instanceof Error).toBe(true);
       });
+
+      it('should through error when number of chars to be shown is equal to 0', () => {
+        let options = { type: 'chars', count: 10 };
+        let p = document.querySelector('#paragraph');
+        let x = new Ellipsis(p, options);
+
+        let result = x._excerptTillChar(0);
+        expect(result instanceof Error).toBe(true);
+      });
     });
+
+    describe('_getTotalCharsInLines', () => {
+      it('the height of element should not exceed the 4 lines height', () => {
+        let options = { type: 'lines', count: 4 };
+        let p = document.querySelector('#paragraph');
+        let x = new Ellipsis(p, options);
+        let pHeight = 0;
+
+        let chars = x._getTotalCharsInLines(4);
+        x.element.text = text;
+        x.text = text;
+
+
+        x._excerptTillChar(chars);
+        pHeight = $(p).css('line-height').replace(/\D+/, '') * 4;
+        expect($(p).height()).toEqual(pHeight);
+      });
+    });
+
   });
 
 });
