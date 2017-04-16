@@ -13,14 +13,14 @@ simple jquery plugin that excert text depending on lines number or characters nu
     * direct download or clone from this repository.
     * via npm
 
-          ```
-              $ npm install --save jquery-ellipsis
-          ```
+    ```bash
+      $ npm install --save jquery-ellipsis
+    ```
     * via bower
 
-          ```
-              $ bower install --save ellipsis
-          ```
+    ```bash
+      $ bower install --save ellipsis
+    ```
 
 2. `jquery >= 2.x` must be included then include ellipsis:
 
