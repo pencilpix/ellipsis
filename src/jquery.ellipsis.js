@@ -11,7 +11,7 @@
   'use strict';
   // define the plugin name and the default options
   const PLUGIN_NAME = 'ellipsis';
-  const VERSION     = '0.0.1';
+  const VERSION     = '0.1.0';
 
 
   /**
@@ -142,7 +142,7 @@
         return 0;
       }
 
-      this.element.append(`<span id="ellipsis_char">x</span>`);
+      this.element.append('<span id="ellipsis_char">x</span>');
 
       $charSpan = $('#ellipsis_char');
       $charSpan.css(SPAN_CHAR_STYLE);
