@@ -1,6 +1,6 @@
 {
   "name": "jquery-ellipsis",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ellipsis text depending on number of lines or number of chars",
   "private": false,
   "main": "./dist/jquery.ellipsis.min.js",
