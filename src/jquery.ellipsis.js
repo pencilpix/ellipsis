@@ -142,7 +142,7 @@
         return 0;
       }
 
-      this.element.append(`<span id="ellipsis_char">x</span>`);
+      this.element.append('<span id="ellipsis_char">x</span>');
 
       $charSpan = $('#ellipsis_char');
       $charSpan.css(SPAN_CHAR_STYLE);
