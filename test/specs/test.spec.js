@@ -14,7 +14,7 @@
  * 3- make sure the manual setup is working for each case.
  */
 describe('Ellipsis', () => {
-  it('it will be defined', () => {
+  it('should be defined', () => {
     expect($.fn.ellipsis).toBeDefined();
   });
 
