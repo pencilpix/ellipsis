@@ -103,10 +103,6 @@
         number = this.options.count;
       }
 
-      if(number <= this.text.length) {
-        return;
-      }
-
       this._excerptTillChar(number);
     }
 
