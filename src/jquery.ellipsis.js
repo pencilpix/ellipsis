@@ -11,7 +11,7 @@
   'use strict';
   // define the plugin name and the default options
   const PLUGIN_NAME = 'ellipsis';
-  const VERSION     = '0.1.2';
+  const VERSION     = '0.1.3';
 
 
   /**
