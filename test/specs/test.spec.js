@@ -53,6 +53,39 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       $('#paragraph').ellipsis({type: 'lines', count: 3});
       expect($('#paragraph').height()).toEqual(expectedHeight);
     });
+
+
+    it('should not excerpt the text if it\'s less than 2 lines', () => {
+      let $p = $('#paragraph');
+      let expectedText = '';
+      let expectedHeight = 0;
+      $p.append('<span class="height-span">x</span>');
+      expectedHeight = $('.height-span').height();
+      $('.height-span').remove();
+
+      $('#paragraph').text(text.slice(0, 16));
+      expectedText = text.slice(0, 16)
+
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      expect($('#paragraph').height()).toEqual(expectedHeight);
+      expect($('#paragraph').text()).toEqual(expectedText);
+    });
+
+    it('should not excerpt the text if text length less than dedicated lines count chars', () => {
+      let $p = $('#paragraph');
+      let expectedText = '';
+      let expectedHeight = 0;
+      $p.append('<span class="height-span">x</span>');
+      expectedHeight = $('.height-span').height() * 2;
+      $('.height-span').remove();
+
+      $('#paragraph').text(text.slice(0, 34));
+      expectedText = text.slice(0, 34)
+
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      expect($('#paragraph').height()).toEqual(expectedHeight);
+      expect($('#paragraph').text()).toEqual(expectedText);
+    });
   });
 
 
