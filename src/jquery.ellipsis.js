@@ -34,7 +34,8 @@
   const SPAN_CHAR_STYLE = {
     visibility: 'hidden',
     opacity: 1,
-    display: 'block'
+    display: 'block',
+    position: 'absolute',
   }
 
 
@@ -136,25 +137,32 @@
     _getTotalCharsInLines(linesNo) {
       let count = 0;
       let $charSpan;
+      let spanId;
       let height;
+      let charWidth;
 
       if(linesNo <= 0) {
         return 0;
       }
 
-      this.element.append('<span id="ellipsis_char">x</span>');
+      spanId = 'ellipsis_char_' + this._getIdNo()
+      this.element.append(`<span id="${spanId}" class="jquery_ellipsis">W</span>`);
 
-      $charSpan = $('#ellipsis_char');
+      $charSpan = $('#' + spanId);
       $charSpan.css(SPAN_CHAR_STYLE);
+      charWidth = $charSpan.width();
+      count = linesNo * this.element.width() / charWidth;
       height = linesNo * $charSpan.height();
 
-      $charSpan.text('');
+
+      $charSpan.text(this.text.slice(0, count));
+      $charSpan.css('max-width', this.element.width());
 
       while($charSpan.height() <= height) {
-        $charSpan.text($charSpan.text() + this.text[count]);
-        count ++;
+        $charSpan.text(this.text.slice(0, $charSpan.text().length + 1));
       }
 
+      count = $charSpan.text().length;
       $charSpan.remove();
 
       if(count && typeof count === 'number') count --;
@@ -176,6 +184,14 @@
     }
 
 
+
+    /**
+     * get unique id for each spn
+     * that used for calculation
+     */
+    _getIdNo() {
+      return $('jquery_ellipsis').length;
+    }
 
 
     /**========================================================================
