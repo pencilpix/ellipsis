@@ -18,7 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   // define the plugin name and the default options
 
   var PLUGIN_NAME = 'ellipsis';
-  var VERSION = '0.1.3';
+  var VERSION = '0.1.4';
 
   /**
    * the default options of Ellipsis
@@ -83,7 +83,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           result = this._excerptTillChar(this.options.count);
         } else if (this.options.type === 'lines') {
           charsNo = this._getTotalCharsInLines(this.options.count);
-          result = this._excerptTillChar(charsNo);
+          if (charsNo) result = this._excerptTillChar(charsNo);
         }
 
         if (result instanceof Error) {
@@ -129,6 +129,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (this.options.type === 'lines' && number >= 3) number -= 3;
 
+        if (number >= this.text.length) return null;
+
         return this.element.html(this.text.slice(0, number) + '...');
       }
 
@@ -162,15 +164,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         count = linesNo * this.element.width() / charWidth;
         height = linesNo * $charSpan.height();
 
+        if (count >= this.text.length) {
+          $charSpan.remove();
+          return null;
+        }
+
         $charSpan.text(this.text.slice(0, count));
         $charSpan.css('max-width', this.element.width());
 
-        while ($charSpan.height() <= height) {
+        while ($charSpan.height() <= height && this.text.length >= $charSpan.text().length + 1) {
           $charSpan.text(this.text.slice(0, $charSpan.text().length + 1));
         }
 
         count = $charSpan.text().length;
+
         $charSpan.remove();
+
+        if (count >= this.text.length) {
+          return null;
+        }
 
         if (count && typeof count === 'number') count--;
         return count;
