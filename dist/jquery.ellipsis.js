@@ -18,7 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   // define the plugin name and the default options
 
   var PLUGIN_NAME = 'ellipsis';
-  var VERSION = '0.1.2';
+  var VERSION = '0.1.3';
 
   /**
    * the default options of Ellipsis
@@ -38,7 +38,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   var SPAN_CHAR_STYLE = {
     visibility: 'hidden',
     opacity: 1,
-    display: 'block'
+    display: 'block',
+    position: 'absolute'
   };
 
   /**
@@ -144,25 +145,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _getTotalCharsInLines(linesNo) {
         var count = 0;
         var $charSpan = void 0;
+        var spanId = void 0;
         var height = void 0;
+        var charWidth = void 0;
 
         if (linesNo <= 0) {
           return 0;
         }
 
-        this.element.append('<span id="ellipsis_char">x</span>');
+        spanId = 'ellipsis_char_' + this._getIdNo();
+        this.element.append('<span id="' + spanId + '" class="jquery_ellipsis">W</span>');
 
-        $charSpan = $('#ellipsis_char');
+        $charSpan = $('#' + spanId);
         $charSpan.css(SPAN_CHAR_STYLE);
+        charWidth = $charSpan.width();
+        count = linesNo * this.element.width() / charWidth;
         height = linesNo * $charSpan.height();
 
-        $charSpan.text('');
+        $charSpan.text(this.text.slice(0, count));
+        $charSpan.css('max-width', this.element.width());
 
         while ($charSpan.height() <= height) {
-          $charSpan.text($charSpan.text() + this.text[count]);
-          count++;
+          $charSpan.text(this.text.slice(0, $charSpan.text().length + 1));
         }
 
+        count = $charSpan.text().length;
         $charSpan.remove();
 
         if (count && typeof count === 'number') count--;
@@ -184,6 +191,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this._resizeTimeout = setTimeout(function () {
           _this.update();
         }, 300);
+      }
+
+      /**
+       * get unique id for each spn
+       * that used for calculation
+       */
+
+    }, {
+      key: '_getIdNo',
+      value: function _getIdNo() {
+        return $('jquery_ellipsis').length;
       }
 
       /**========================================================================
