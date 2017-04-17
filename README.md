@@ -60,3 +60,10 @@ option     | type    | value
 type       | String  | determines type is whether`chars` or `lines` number that the text should be excerpted.
 count      | Number  | determines the number of `chars` or `lines` should the text be excerpted.
 
+
+
+---------------------------------------------------------------------------------------------------------------
+### TODO:
+1. custom events
+2. enhance the puplic API
+
