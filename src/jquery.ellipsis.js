@@ -105,7 +105,7 @@
 
 
       if(this.options.type === 'lines') {
-        $(window).on('resize', this._resizeHandler);
+        $(window).on('resize', this.element.selector, this._resizeHandler);
       }
       this.element.trigger(EVENTS.initialized);
     }
