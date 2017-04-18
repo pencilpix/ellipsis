@@ -135,6 +135,25 @@
 
 
 
+    /**
+     * reset ellipsis instance options
+     * if any change is needed later.
+     *
+     * @param {Object} options text/type/count.
+     */
+    reset(options) {
+      if(options.text) this.text = options.text;
+      if(options.type) this.options.type = options.type;
+      if(options.count) this.options.count = options.count;
+
+      if(Object.keys(options).length > 0) {
+        this.element.text(this.text);
+        this.update();
+      }
+    }
+
+
+
     destroy() {
       $(window).off('resize', this._resizeHandler);
       this.element.text(this.text);
