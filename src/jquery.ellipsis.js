@@ -169,7 +169,7 @@
 
 
     /**
-     * get the number of charters in dedicated
+     * get the number of characters in dedicated
      * number of lines.
      *
      * @param { Number }  linesNo  positive number that represent lines no.
@@ -238,7 +238,7 @@
 
 
     /**
-     * get unique id for each spn
+     * get unique id for each span
      * that used for calculation
      */
     _getIdNo() {
