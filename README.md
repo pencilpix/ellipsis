@@ -66,12 +66,12 @@ count      | Number  | determines the number of `chars` or `lines` should the te
 
 event                  | when
 -----------------------|-----------------------------------------------------------------------------------------------
-ellipsis.initialize    | before the initialization of the plugin
-ellipsis.initialized   | after the initialization.
-ellipsis.excerpt       | before excerpt the text
-ellipsis.excerpted     | after the text being excerpted
-ellipsis.update        | before updating when window is resized
-ellipsis.updated       | after updating.
+initialize.ellipsis    | before the initialization of the plugin
+initialized.ellipsis   | after the initialization.
+excerpt.ellipsis       | before excerpt the text
+excerpted.ellipsis     | after the text being excerpted
+update.ellipsis        | before updating when window is resized
+updated.ellipsis       | after updating.
 
 
 #### example:
@@ -86,6 +86,6 @@ ellipsis.updated       | after updating.
 ---------------------------------------------------------------------------------------------------------------
 ### TODO:
 - [ ] enhance the puplic API
-    - [ ] Making Ellipsis Destroyable.
+    - [x] Making Ellipsis Destroyable.
     - [ ] Support re-adjust option later.
 
