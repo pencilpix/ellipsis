@@ -135,6 +135,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         done();
       }, 400)
     });
+
+    it('should update options and excerpt text relative to changes', () => {
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      $('#paragraph').ellipsis('reset', {text: 'text changed', type: 'chars', count: 11});
+
+      expect($('#paragraph').text()).toEqual('text change...');
+      expect($('#paragraph').text().length).toEqual(14);
+    });
   });
 
 
