@@ -76,7 +76,7 @@ updated.ellipsis       | after updating.
 
 #### example:
   ```js
-  $('#paragraph').on('ellipsis.initialize', function() {
+  $('#paragraph').on('initialize.ellipsis', function() {
     // do some stuff
   });
   ```
