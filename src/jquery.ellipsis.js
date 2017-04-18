@@ -40,6 +40,20 @@
 
 
 
+  /**
+   * different custom events shoud
+   * @type { Object }
+   */
+  const EVENTS = {
+    initialize:  new CustomEvent('ellipsis.initialize'),
+    initialized: new CustomEvent('ellipsis.initialized'),
+    update:      new CustomEvent('ellipsis.update'),
+    updated:     new CustomEvent('ellipsis.updated'),
+    excerpt:     new CustomEvent('ellipsis.excerpt'),
+    excerpted:   new CustomEvent('ellipsis.excerpted')
+  };
+
+
 
   /**
    * Ellipsis class that excerpt the text of an attached element depending
@@ -70,12 +84,17 @@
     init() {
       let result, charsNo;
 
+      this.element.trigger(EVENTS.initialize);
+
       if(this.options.type === 'chars'){
         result = this._excerptTillChar(this.options.count);
       } else if(this.options.type === 'lines') {
         charsNo = this._getTotalCharsInLines(this.options.count);
-        if(charsNo)
+        if(charsNo){
+          this.element.trigger(EVENTS.excerpt);
           result = this._excerptTillChar(charsNo);
+          this.element.trigger(EVENTS.excerpted);
+        }
       }
 
 
@@ -87,6 +106,7 @@
       if(this.options.type === 'lines') {
         $(window).on('resize', this._resizeHandler);
       }
+      this.element.trigger(EVENTS.initialized);
     }
 
 
@@ -97,13 +117,19 @@
     update() {
       let number;
 
+      this.element.trigger(EVENTS.update);
+
       if(this.options.type === 'lines') {
         number = this._getTotalCharsInLines(this.options.count)
       } else {
         number = this.options.count;
       }
 
+      this.element.trigger(EVENTS.excerpt);
       this._excerptTillChar(number);
+      this.element.trigger(EVENTS.excerpted);
+
+      this.element.trigger(EVENTS.updated);
     }
 
 
@@ -117,6 +143,7 @@
      * @param { Number } number the total number of chars should be in element
      */
     _excerptTillChar(number) {
+
       if(number <= 0)
         return new Error('Number of chars to be shown is equal to or less than zero !!');
 
@@ -127,6 +154,7 @@
         return null;
 
       return this.element.html(this.text.slice(0, number) + '...');
+
     }
 
 
