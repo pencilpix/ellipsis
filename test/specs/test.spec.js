@@ -96,12 +96,12 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       let excerpt     = 0;
       let excerpted   = 0;
 
-      $('#paragraph').on('ellipsis.initialize', () => initialize = 1);
-      $('#paragraph').on('ellipsis.initialized', () => initialized = 1);
-      $('#paragraph').on('ellipsis.update', () => update = 1);
-      $('#paragraph').on('ellipsis.updated', () => updated = 1);
-      $('#paragraph').on('ellipsis.excerpt', () => excerpt = 1);
-      $('#paragraph').on('ellipsis.excerpted', () => excerpted = 1);
+      $('#paragraph').on('initialize.ellipsis', () => initialize = 1);
+      $('#paragraph').on('initialized.ellipsis', () => initialized = 1);
+      $('#paragraph').on('update.ellipsis', () => update = 1);
+      $('#paragraph').on('updated.ellipsis', () => updated = 1);
+      $('#paragraph').on('excerpt.ellipsis', () => excerpt = 1);
+      $('#paragraph').on('excerpted.ellipsis', () => excerpted = 1);
 
 
 
@@ -119,6 +119,22 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         done();
       }, 100)
     });
+
+
+    it('should be destroyable', (done) => {
+      let value = 0;
+
+      $('#paragraph').on('ellipsis.update', () => value = 1);
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      $('#paragraph').ellipsis('destroy');
+      $(window).trigger('resize');
+
+      setTimeout(() => {
+        expect(value).toBe(0);
+        expect($('#paragraph').text()).toEqual(text);
+        done();
+      }, 400)
+    })
   });
 
 
