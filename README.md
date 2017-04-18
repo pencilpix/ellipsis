@@ -84,8 +84,16 @@ updated.ellipsis       | after updating.
 
 
 ---------------------------------------------------------------------------------------------------------------
-### TODO:
-- [ ] enhance the puplic API
-    - [x] Making Ellipsis Destroyable.
-    - [ ] Support re-adjust option later.
+### Features:
+- [x] enhance the puplic API
+    - [x] two different types of excerpts by lines/characters
+    - [x] Support re-adjust option later.
+    - [x] different custom event through the life cycle of the plugin.
+    - [x] Destroyable.
+    - [x] data attribute automatic init.
+
+    - [ ] Up comming!
+        - [ ] use dedicated word instead of `...`
+        - [ ] use url to show more.
+        - [ ] use link class to control the style of link.
 
