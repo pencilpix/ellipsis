@@ -45,12 +45,13 @@
    * @type { Object }
    */
   const EVENTS = {
-    initialize:  new CustomEvent('ellipsis.initialize'),
-    initialized: new CustomEvent('ellipsis.initialized'),
-    update:      new CustomEvent('ellipsis.update'),
-    updated:     new CustomEvent('ellipsis.updated'),
-    excerpt:     new CustomEvent('ellipsis.excerpt'),
-    excerpted:   new CustomEvent('ellipsis.excerpted')
+    namespace:   '.ellispsis',
+    initialize:  'initialize.ellipsis',
+    initialized: 'initialized.ellipsis',
+    update:      'update.ellipsis',
+    updated:     'updated.ellipsis',
+    excerpt:     'excerpt.ellipsis',
+    excerpted:   'excerpted.ellipsis'
   };
 
 
@@ -130,6 +131,14 @@
       this.element.trigger(EVENTS.excerpted);
 
       this.element.trigger(EVENTS.updated);
+    }
+
+
+
+    destroy() {
+      $(window).off('resize', this._resizeHandler);
+      this.element.text(this.text);
+      this.element.off(EVENTS.namespace);
     }
 
 
