@@ -1,14 +1,14 @@
 ## ellipsis
 
 
-simple jquery plugin that excert text depending on lines number or characters number.
+simple jquery plugin that excerpts text depending on __lines__  or __characters__ number.
 
 [![Build Status](https://travis-ci.org/pencilpix/ellipsis.svg?branch=master)](https://travis-ci.org/pencilpix/ellipsis) [![Coverage Status](https://coveralls.io/repos/github/pencilpix/ellipsis/badge.svg?branch=develop)](https://coveralls.io/github/pencilpix/ellipsis?branch=develop) [![DevDependency Status](https://david-dm.org/pencilpix/ellipsis/dev-status.svg)](https://david-dm.org/pencilpix/ellipsis/?type=dev)
 
 ---------------------------------------------------------------------------------------------------
 ### installation.
 
-1. download via using one of the following
+1. Download using one of the following Methods
     * direct download or clone from this repository.
     * via npm
 
@@ -21,7 +21,7 @@ simple jquery plugin that excert text depending on lines number or characters nu
       $ bower install --save ellipsis
     ```
 
-2. `jquery >= 2.x` must be included then include ellipsis:
+2. please be sure to include`jquery >= 2.x` then include ellipsis:
 
     ```html
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
