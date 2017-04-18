@@ -86,6 +86,39 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       expect($('#paragraph').height()).toEqual(expectedHeight);
       expect($('#paragraph').text()).toEqual(expectedText);
     });
+
+
+    it('should emit ellipsis custom events in different positions', (done) => {
+      let initialize  = 0;
+      let initialized = 0;
+      let update      = 0;
+      let updated     = 0;
+      let excerpt     = 0;
+      let excerpted   = 0;
+
+      $('#paragraph').on('ellipsis.initialize', () => initialize = 1);
+      $('#paragraph').on('ellipsis.initialized', () => initialized = 1);
+      $('#paragraph').on('ellipsis.update', () => update = 1);
+      $('#paragraph').on('ellipsis.updated', () => updated = 1);
+      $('#paragraph').on('ellipsis.excerpt', () => excerpt = 1);
+      $('#paragraph').on('ellipsis.excerpted', () => excerpted = 1);
+
+
+
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+
+      $('#paragraph').ellipsis('update');
+
+      setTimeout(() => {
+        expect(initialize).toBe(1);
+        expect(initialized).toBe(1);
+        expect(update).toBe(1);
+        expect(updated).toBe(1);
+        expect(excerpt).toBe(1);
+        expect(excerpted).toBe(1);
+        done();
+      }, 100)
+    });
   });
 
 
