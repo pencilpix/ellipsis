@@ -18,7 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   // define the plugin name and the default options
 
   var PLUGIN_NAME = 'ellipsis';
-  var VERSION = '0.1.4';
+  var VERSION = '0.1.5';
 
   /**
    * the default options of Ellipsis
@@ -40,6 +40,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     opacity: 1,
     display: 'block',
     position: 'absolute'
+  };
+
+  /**
+   * different custom events shoud
+   * @type { Object }
+   */
+  var EVENTS = {
+    namespace: '.ellispsis',
+    initialize: 'initialize.ellipsis',
+    initialized: 'initialized.ellipsis',
+    update: 'update.ellipsis',
+    updated: 'updated.ellipsis',
+    excerpt: 'excerpt.ellipsis',
+    excerpted: 'excerpted.ellipsis'
   };
 
   /**
@@ -79,11 +93,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var result = void 0,
             charsNo = void 0;
 
+        this.element.trigger(EVENTS.initialize);
+
         if (this.options.type === 'chars') {
           result = this._excerptTillChar(this.options.count);
         } else if (this.options.type === 'lines') {
           charsNo = this._getTotalCharsInLines(this.options.count);
-          if (charsNo) result = this._excerptTillChar(charsNo);
+          if (charsNo) {
+            this.element.trigger(EVENTS.excerpt);
+            result = this._excerptTillChar(charsNo);
+            this.element.trigger(EVENTS.excerpted);
+          }
         }
 
         if (result instanceof Error) {
@@ -93,6 +113,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (this.options.type === 'lines') {
           $(window).on('resize', this._resizeHandler);
         }
+        this.element.trigger(EVENTS.initialized);
       }
 
       /**
@@ -104,13 +125,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function update() {
         var number = void 0;
 
+        this.element.trigger(EVENTS.update);
+
         if (this.options.type === 'lines') {
           number = this._getTotalCharsInLines(this.options.count);
         } else {
           number = this.options.count;
         }
 
+        this.element.trigger(EVENTS.excerpt);
         this._excerptTillChar(number);
+        this.element.trigger(EVENTS.excerpted);
+
+        this.element.trigger(EVENTS.updated);
+      }
+
+      /**
+       * reset ellipsis instance options
+       * if any change is needed later.
+       *
+       * @param {Object} options text/type/count.
+       */
+
+    }, {
+      key: 'reset',
+      value: function reset(options) {
+        if (options.text) this.text = options.text;
+        if (options.type) this.options.type = options.type;
+        if (options.count) this.options.count = options.count;
+
+        if (Object.keys(options).length > 0) {
+          this.element.text(this.text);
+          this.update();
+        }
+      }
+    }, {
+      key: 'destroy',
+      value: function destroy() {
+        $(window).off('resize', this._resizeHandler);
+        this.element.text(this.text);
+        this.element.off(EVENTS.namespace);
       }
 
       /*=========================================================================
@@ -125,6 +179,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: '_excerptTillChar',
       value: function _excerptTillChar(number) {
+
         if (number <= 0) return new Error('Number of chars to be shown is equal to or less than zero !!');
 
         if (this.options.type === 'lines' && number >= 3) number -= 3;
@@ -135,7 +190,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       /**
-       * get the number of charters in dedicated
+       * get the number of characters in dedicated
        * number of lines.
        *
        * @param { Number }  linesNo  positive number that represent lines no.
@@ -206,7 +261,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       /**
-       * get unique id for each spn
+       * get unique id for each span
        * that used for calculation
        */
 
