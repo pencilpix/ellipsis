@@ -1,6 +1,5 @@
 ## ellipsis
 
--------------------------------------------------------------------------------
 
 simple jquery plugin that excert text depending on lines number or characters number.
 
@@ -52,6 +51,8 @@ ellipsis can be used in two different ways:
     </script>
     ```
 
+
+
 ---------------------------------------------------------------------------------------------------------------
 ### options
 
@@ -61,9 +62,30 @@ type       | String  | determines type is whether`chars` or `lines` number that 
 count      | Number  | determines the number of `chars` or `lines` should the text be excerpted.
 
 
+### events
+
+event                  | when
+-----------------------|-----------------------------------------------------------------------------------------------
+ellipsis.initialize    | before the initialization of the plugin
+ellipsis.initialized   | after the initialization.
+ellipsis.excerpt       | before excerpt the text
+ellipsis.excerpted     | after the text being excerpted
+ellipsis.update        | before updating when window is resized
+ellipsis.updated       | after updating.
+
+
+#### example:
+  ```js
+  $('#paragraph').on('ellipsis.initialize', function() {
+    // do some stuff
+  });
+  ```
+
+
 
 ---------------------------------------------------------------------------------------------------------------
 ### TODO:
-1. custom events
-2. enhance the puplic API
+- [ ] enhance the puplic API
+    - [ ] Making Ellipsis Destroyable.
+    - [ ] Support re-adjust option later.
 
