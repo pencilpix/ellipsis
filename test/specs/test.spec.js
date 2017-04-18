@@ -86,6 +86,63 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       expect($('#paragraph').height()).toEqual(expectedHeight);
       expect($('#paragraph').text()).toEqual(expectedText);
     });
+
+
+    it('should emit ellipsis custom events in different positions', (done) => {
+      let initialize  = 0;
+      let initialized = 0;
+      let update      = 0;
+      let updated     = 0;
+      let excerpt     = 0;
+      let excerpted   = 0;
+
+      $('#paragraph').on('initialize.ellipsis', () => initialize = 1);
+      $('#paragraph').on('initialized.ellipsis', () => initialized = 1);
+      $('#paragraph').on('update.ellipsis', () => update = 1);
+      $('#paragraph').on('updated.ellipsis', () => updated = 1);
+      $('#paragraph').on('excerpt.ellipsis', () => excerpt = 1);
+      $('#paragraph').on('excerpted.ellipsis', () => excerpted = 1);
+
+
+
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+
+      $('#paragraph').ellipsis('update');
+
+      setTimeout(() => {
+        expect(initialize).toBe(1);
+        expect(initialized).toBe(1);
+        expect(update).toBe(1);
+        expect(updated).toBe(1);
+        expect(excerpt).toBe(1);
+        expect(excerpted).toBe(1);
+        done();
+      }, 100)
+    });
+
+
+    it('should be destroyable', (done) => {
+      let value = 0;
+
+      $('#paragraph').on('ellipsis.update', () => value = 1);
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      $('#paragraph').ellipsis('destroy');
+      $(window).trigger('resize');
+
+      setTimeout(() => {
+        expect(value).toBe(0);
+        expect($('#paragraph').text()).toEqual(text);
+        done();
+      }, 400)
+    });
+
+    it('should update options and excerpt text relative to changes', () => {
+      $('#paragraph').ellipsis({type: 'lines', count: 2});
+      $('#paragraph').ellipsis('reset', {text: 'text changed', type: 'chars', count: 11});
+
+      expect($('#paragraph').text()).toEqual('text change...');
+      expect($('#paragraph').text().length).toEqual(14);
+    });
   });
 
 
