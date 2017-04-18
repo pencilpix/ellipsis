@@ -1,7 +1,7 @@
 {
   "name": "ellipsis",
   "description": "ellipsis text depending on number of lines or number of chars",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "./dist/jquery.ellipsis.min.js",
   "authors": [
     "Mohamed Hassan"
