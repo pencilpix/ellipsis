@@ -134,7 +134,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         expect($('#paragraph').text()).toEqual(text);
         done();
       }, 400)
-    })
+    });
   });
 
 
