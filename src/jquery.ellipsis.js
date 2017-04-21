@@ -68,8 +68,6 @@
      * Public init() initialize the plugin and do logical stuff
      */
     init() {
-      let result, charsNo;
-
       this.element.trigger(EVENTS.initialize);
 
       this.element.trigger(EVENTS.excerpt);
