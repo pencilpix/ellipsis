@@ -45,7 +45,7 @@
    * @type { Object }
    */
   const EVENTS = {
-    namespace:   '.ellispsis',
+    namespace:   'ellispsis',
     initialize:  'initialize.ellipsis',
     initialized: 'initialized.ellipsis',
     update:      'update.ellipsis',
