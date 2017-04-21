@@ -26,21 +26,6 @@
 
 
   /**
-   * the styles of span used to calculate height
-   * of each line
-   *
-   * @type { Object }
-   */
-  const SPAN_CHAR_STYLE = {
-    visibility: 'hidden',
-    opacity: 1,
-    display: 'block',
-    position: 'absolute',
-  }
-
-
-
-  /**
    * different custom events shoud
    * @type { Object }
    */
