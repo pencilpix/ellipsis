@@ -5,20 +5,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @{Project}     Ellipsis plugin
- * @{Description} jquery plugin that excerpt the text at dedecated lines or
- *                dedicated number of chars
+ * @Project     Ellipsis plugin
+ * @Description jquery plugin that excerpt the text at dedecated lines or
+ *              dedicated number of chars
  *
- * @{Author}      Mohamed Hassan
- * @{Author_url}  http://mohamedhassan.me
- * @{License}     MIT
+ * @Author      Mohamed Hassan
+ * @Author_url  http://mohamedhassan.me
+ * @License     MIT
  */
 ;(function ($, window, document, undefined) {
   'use strict';
   // define the plugin name and the default options
 
   var PLUGIN_NAME = 'ellipsis';
-  var VERSION = '0.1.5';
+  var VERSION = '0.1.6';
 
   /**
    * the default options of Ellipsis
@@ -30,24 +30,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   };
 
   /**
-   * the styles of span used to calculate height
-   * of each line
-   *
-   * @type { Object }
-   */
-  var SPAN_CHAR_STYLE = {
-    visibility: 'hidden',
-    opacity: 1,
-    display: 'block',
-    position: 'absolute'
-  };
-
-  /**
    * different custom events shoud
    * @type { Object }
    */
   var EVENTS = {
-    namespace: '.ellispsis',
+    namespace: 'ellispsis',
     initialize: 'initialize.ellipsis',
     initialized: 'initialized.ellipsis',
     update: 'update.ellipsis',
@@ -90,28 +77,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     _createClass(Ellipsis, [{
       key: 'init',
       value: function init() {
-        var result = void 0,
-            charsNo = void 0;
-
         this.element.trigger(EVENTS.initialize);
 
-        if (this.options.type === 'chars') {
-          result = this._excerptTillChar(this.options.count);
-        } else if (this.options.type === 'lines') {
-          charsNo = this._getTotalCharsInLines(this.options.count);
-          if (charsNo) {
-            this.element.trigger(EVENTS.excerpt);
-            result = this._excerptTillChar(charsNo);
-            this.element.trigger(EVENTS.excerpted);
-          }
-        }
-
-        if (result instanceof Error) {
-          throw result;
+        this.element.trigger(EVENTS.excerpt);
+        if (this.options.type === 'lines') {
+          this._excerptLines(this.options.count);
+        } else {
+          this._excerptChars(this.options.count);
         }
 
         if (this.options.type === 'lines') {
-          $(window).on('resize', this._resizeHandler);
+          $(window).on('resize', this.element.selector, this._resizeHandler);
         }
         this.element.trigger(EVENTS.initialized);
       }
@@ -123,21 +99,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'update',
       value: function update() {
-        var number = void 0;
-
         this.element.trigger(EVENTS.update);
 
-        if (this.options.type === 'lines') {
-          number = this._getTotalCharsInLines(this.options.count);
-        } else {
-          number = this.options.count;
-        }
+        if (this.options.type === 'lines') this._excerptLines(this.options.count);else this._excerptChars(this.options.count);
 
-        this.element.trigger(EVENTS.excerpt);
-        this._excerptTillChar(number);
-        this.element.trigger(EVENTS.excerpted);
-
+        //later
         this.element.trigger(EVENTS.updated);
+        return true;
       }
 
       /**
@@ -177,70 +145,56 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        */
 
     }, {
-      key: '_excerptTillChar',
-      value: function _excerptTillChar(number) {
-
+      key: '_excerptChars',
+      value: function _excerptChars(number) {
         if (number <= 0) return new Error('Number of chars to be shown is equal to or less than zero !!');
-
-        if (this.options.type === 'lines' && number >= 3) number -= 3;
 
         if (number >= this.text.length) return null;
 
-        return this.element.html(this.text.slice(0, number) + '...');
+        this.element.html(this.text.slice(0, number) + '...');
+        this.element.trigger(EVENTS.excerpted);
+        return true;
       }
 
       /**
-       * get the number of characters in dedicated
+       * excerpts the text and leave a dedicated
        * number of lines.
        *
        * @param { Number }  linesNo  positive number that represent lines no.
-       * @return { Number } the total number of chars that could be in the lines.
        */
 
     }, {
-      key: '_getTotalCharsInLines',
-      value: function _getTotalCharsInLines(linesNo) {
-        var count = 0;
-        var $charSpan = void 0;
-        var spanId = void 0;
-        var height = void 0;
-        var charWidth = void 0;
+      key: '_excerptLines',
+      value: function _excerptLines(linesNo) {
+        var lineHeight = void 0;
+        var originalHeight = this.element.text(this.text).height();
+        var targetHeight = void 0;
+        var start = 0;
+        var end = this.text.length - 1;
+        var middle = void 0;
 
-        if (linesNo <= 0) {
-          return 0;
+        lineHeight = this.element.text('w').height();
+        targetHeight = lineHeight * linesNo;
+
+        if (originalHeight <= targetHeight) {
+          this.element.text(this.text);
+          return false;
         }
 
-        spanId = 'ellipsis_char_' + this._getIdNo();
-        this.element.append('<span id="' + spanId + '" class="jquery_ellipsis">W</span>');
+        while (start <= end) {
+          middle = Math.floor((start + end) / 2);
+          this.element.text(this.text.slice(0, middle));
 
-        $charSpan = $('#' + spanId);
-        $charSpan.css(SPAN_CHAR_STYLE);
-        charWidth = $charSpan.width();
-        count = linesNo * this.element.width() / charWidth;
-        height = linesNo * $charSpan.height();
-
-        if (count >= this.text.length) {
-          $charSpan.remove();
-          return null;
+          if (this.element.height() <= targetHeight) {
+            start = middle + 1;
+          } else {
+            end = middle - 1;
+          }
         }
 
-        $charSpan.text(this.text.slice(0, count));
-        $charSpan.css('max-width', this.element.width());
-
-        while ($charSpan.height() <= height && this.text.length >= $charSpan.text().length + 1) {
-          $charSpan.text(this.text.slice(0, $charSpan.text().length + 1));
-        }
-
-        count = $charSpan.text().length;
-
-        $charSpan.remove();
-
-        if (count >= this.text.length) {
-          return null;
-        }
-
-        if (count && typeof count === 'number') count--;
-        return count;
+        this.element.text(this.text.slice(0, middle - 3) + '...');
+        this.element.trigger(EVENTS.excerpted);
+        return true;
       }
 
       /**
@@ -258,17 +212,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this._resizeTimeout = setTimeout(function () {
           _this.update();
         }, 300);
-      }
-
-      /**
-       * get unique id for each span
-       * that used for calculation
-       */
-
-    }, {
-      key: '_getIdNo',
-      value: function _getIdNo() {
-        return $('jquery_ellipsis').length;
       }
 
       /**========================================================================
