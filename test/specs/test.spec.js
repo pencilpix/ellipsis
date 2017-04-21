@@ -110,12 +110,12 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       $('#paragraph').ellipsis('update');
 
       setTimeout(() => {
-        expect(initialize).toBe(1);
-        expect(initialized).toBe(1);
-        expect(update).toBe(1);
-        expect(updated).toBe(1);
-        expect(excerpt).toBe(1);
-        expect(excerpted).toBe(1);
+        expect(initialize).toBe(1, 'should initialize');
+        expect(initialized).toBe(1, 'should initialized');
+        expect(update).toBe(1, 'should update');
+        expect(updated).toBe(1, 'should updated');
+        expect(excerpt).toBe(1, 'should excerpt');
+        expect(excerpted).toBe(1, 'should excerpted');
         done();
       }, 100)
     });
@@ -183,13 +183,13 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
       expect(x.options).toEqual(options);
     });
 
-    describe('_excerptTillChar', () => {
+    describe('_excerptChars', () => {
       it('should excerpt till char at position: 30', () => {
         let options = { type: 'chars', count: 10 };
         let p = document.querySelector('#paragraph');
         let x = new Ellipsis(p, options);
 
-        x._excerptTillChar(30);
+        x._excerptChars(30);
         expect($(p).text().length).toEqual(33);
       });
 
@@ -198,7 +198,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         let p = document.querySelector('#paragraph');
         let x = new Ellipsis(p, options);
 
-        let result = x._excerptTillChar(-1);
+        let result = x._excerptChars(-1);
         expect(result instanceof Error).toBe(true);
       });
 
@@ -207,24 +207,21 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`
         let p = document.querySelector('#paragraph');
         let x = new Ellipsis(p, options);
 
-        let result = x._excerptTillChar(0);
+        let result = x._excerptChars(0);
         expect(result instanceof Error).toBe(true);
       });
     });
 
-    describe('_getTotalCharsInLines', () => {
+    describe('_excerptLines', () => {
       it('the height of element should not exceed the 4 lines height', () => {
         let options = { type: 'lines', count: 4 };
         let p = document.querySelector('#paragraph');
         let x = new Ellipsis(p, options);
         let pHeight = 0;
 
-        let chars = x._getTotalCharsInLines(4);
         x.element.text = text;
         x.text = text;
 
-
-        x._excerptTillChar(chars);
         pHeight = $(p).css('line-height').replace(/\D+/, '') * 4;
         expect($(p).height()).toEqual(pHeight);
       });
