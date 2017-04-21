@@ -1,11 +1,11 @@
 /**
- * @{Project}     Ellipsis plugin
- * @{Description} jquery plugin that excerpt the text at dedecated lines or
- *                dedicated number of chars
+ * @Project     Ellipsis plugin
+ * @Description jquery plugin that excerpt the text at dedecated lines or
+ *              dedicated number of chars
  *
- * @{Author}      Mohamed Hassan
- * @{Author_url}  http://mohamedhassan.me
- * @{License}     MIT
+ * @Author      Mohamed Hassan
+ * @Author_url  http://mohamedhassan.me
+ * @License     MIT
  */
 ;(function($, window, document, undefined){
   'use strict';
